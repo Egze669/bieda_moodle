@@ -24,8 +24,8 @@ class Validator
             throw new InvalidArgumentException('The role can not be empty.');
         }
 
-        if (strtoupper(u($role)->trim()) !== 'ROLE_STUDENT' || strtoupper(u($role)->trim()) !== 'ROLE_TEACHER') {
-            throw new InvalidArgumentException('The role can only be ROLE_TEACHER or ROLE_STUDENT'.$role);
+        if (u($role)->trim()->upper()  != 'ROLE_STUDENT' && u($role)->trim()->upper() != 'ROLE_TEACHER') {
+            throw new InvalidArgumentException('The role can only be ROLE_TEACHER or ROLE_STUDENT');
         }
 
         return $role;

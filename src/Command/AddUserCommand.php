@@ -84,10 +84,10 @@ class AddUserCommand extends Command
         }
         $role = $input->getArgument('role');
         if (null !== $role) {
-            $this->io->text(' > <info>Role</info>: '.$role);
+            $this->io->text(' > <info>Role</info>: '.u($role)->trim()->upper());
         } else {
             $role = $this->io->ask('Role (ROLE_STUDENT or ROLE_TEACHER)', null, [$this->validator, 'validateRoles']);
-            $input->setArgument('role', $role);
+            $input->setArgument('role', u($role)->trim()->upper());
         }
 
     }
