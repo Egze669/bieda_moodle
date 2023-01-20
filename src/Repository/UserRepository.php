@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\Exception;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -70,7 +71,26 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 //            ->getResult()
 //        ;
 //    }
+    /**
+     * @throws Exception
+     */
+    public function findAllTeachers(): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
 
+        $sql = "
+        SELECT email FROM user
+        WHERE roles like '%ROLE_TEACHER%'
+        ";
+        $stmt = $conn->prepare($sql);
+        $result = $stmt->executeQuery();
+        return $result->fetchAllAssociative();
+//        return $this->createQueryBuilder('u')
+//            ->andWhere('u.roles = :val')
+//            ->setParameter('val', '%"ROLE_TEACHER"%')
+//            ->getQuery()
+//            ->getResult();
+    }
 //    public function findOneBySomeField($value): ?User
 //    {
 //        return $this->createQueryBuilder('u')

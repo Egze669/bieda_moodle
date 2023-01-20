@@ -8,13 +8,23 @@
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
 </style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <div class="example-wrapper" >
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ '/home/maciejw/moodle/src/Controller/StudentController.php'|file_link(0) }}">src/Controller/StudentController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/home/maciejw/moodle/templates/student/index.html.twig'|file_link(0) }}">templates/student/index.html.twig</a></code></li>
-    </ul>
-</div>
+        <h1>Hello {{ controller_name }}! ✅</h1>
+        {{ form_start(form) }}
+        {{ form_label('title') }}
+        {{ form_widget('title') }}
+
+        {{ form_label('description') }}
+        {{ form_widget('description') }}
+
+        {{ form_label('activationDate') }}
+        {{ form_widget('activationDate') }}
+
+        {{ form_label('deactivationDate') }}
+        {{ form_widget('deactivationDate') }}
+
+        <button type="submit">wyslij zadanie</button>
+        {{ form_end(form) }}
+    </div>
 {% endblock %}

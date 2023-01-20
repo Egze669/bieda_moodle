@@ -14,6 +14,17 @@
         {% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
+    <header>
+        {% block header %}
+            {% if app.user %}
+                <a href="{{  path('app_logout') }}">logout</a>
+            {% else %}
+                <a href="{{  path('app_login') }}">login</a>
+            {% endif %}
+        {% endblock %}
+    </header>
+        {% block body %}
+
+        {% endblock %}
     </body>
 </html>
