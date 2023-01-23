@@ -22,7 +22,7 @@ class RedirectionController extends AbstractController
         elseif (in_array('ROLE_STUDENT',$this->getUser()->getRoles()))
             return $this->redirect($this->generateUrl('teacher_viewer'));
         else
-        return $this->render('login/index.html.twig', [
+        return $this->render('login/addTask.html.twig', [
         ]);
     }
 }

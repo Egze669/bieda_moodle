@@ -19,8 +19,11 @@
 
     <div class="example-wrapper">
         <ul>
-        {% for teachers in teachersArray %}
-            <li><a href="{{  url('teacher_tasks',{'email': teachers['email']}) }}"> {{ teachers.email }} </a></li>
+            {{ dump(tasks) }}
+        {% for task in tasks %}
+            {{ dump(task) }}
+            <li><a href="{{  url('teacher_tasks',{'email': task.id}) }}"> {{ task.title }}</a></li>
+            <a href="">answer</a>
         {% endfor %}
         </ul>
     </div>
