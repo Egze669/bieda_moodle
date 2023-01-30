@@ -19,11 +19,14 @@
 
     <div class="example-wrapper">
         <ul>
-            {{ dump(tasks) }}
-        {% for task in tasks %}
-            {{ dump(task) }}
-            <li><a href="{{  url('student_answer',{'idTask': task.id}) }}"> {{ task.title }}</a></li>
+            {% if answers is not null %}
+        {% for answer in answers %}
+            {{ dump(answer) }}
+            {{ dump(answer.task.title) }}
         {% endfor %}
+            {% else %}
+                <p> nie wysłałeś jeszcze żadnych odpowiedzi</p>
+            {% endif %}
         </ul>
     </div>
 {% endblock %}

@@ -2,13 +2,20 @@
 
 namespace App\Controller;
 
+use App\Entity\Answer;
 use App\Entity\Task;
 use App\Entity\User;
 use App\Form\TaskType;
 use Doctrine\Persistence\ManagerRegistry;
+use League\Flysystem\Filesystem;
+use League\Flysystem\FilesystemException;
+use League\Flysystem\FilesystemOperator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 class TeacherController extends AbstractController
@@ -75,6 +82,30 @@ class TeacherController extends AbstractController
         return $this->render('teacher/taskAnswers.html.twig', [
             'answers' => $task->getAnswers()
         ]);
+    }
+
+    /**
+     * @throws FilesystemException
+     */
+    #[Route('/download/{idAnswer}', name: 'download_answer')]
+    public function downloadAnswer(ManagerRegistry $doctrine,string $idAnswer,FilesystemOperator $answerStorage): StreamedResponse
+    {
+        $answer = $doctrine->getRepository(Answer::class)->find($idAnswer);
+        $pathParts = pathinfo($answer->getContent());
+
+        $response = new StreamedResponse(function() use ($answerStorage, $answer) {
+            $outputStream = fopen('php://output', 'wb');
+            $fileStream = $answerStorage->readStream($answer->getContent());
+            stream_copy_to_stream($fileStream, $outputStream);
+        });
+        $response->headers->set('Content-Type', $pathParts['extension']);
+        $disposition = HeaderUtils::makeDisposition(
+            HeaderUtils::DISPOSITION_ATTACHMENT,
+            $answer->getTask()->getTitle()."_".$answer->getSubmitDate()->format('Y-m-d')."_".$answer->getAutor()->getEmail()
+        );
+        $response->headers->set('Content-Disposition', $disposition);
+        return $response;
+
     }
 
     #[Route('/teacher', name: 'app_teacher')]

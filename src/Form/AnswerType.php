@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Answer;
+use League\Flysystem\FilesystemOperator;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -13,7 +14,9 @@ class AnswerType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('content',FileType::class)
+            ->add('content',FileType::class,[
+                'data_class' => FilesystemOperator::class
+            ])
         ;
     }
 

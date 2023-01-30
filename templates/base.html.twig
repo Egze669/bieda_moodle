@@ -17,6 +17,12 @@
     <header>
         {% block header %}
             {% if app.user %}
+                {% if is_granted('ROLE_STUDENT') %}
+                <a href="{{ path('teacher_viewer') }}">lista wykladowcow</a>
+                <a href="{{ path('student_answers') }}">twoje odpowiedzi</a>
+                {% else %}
+                        <a href="{{ path('teacher_viewer') }}">twoje zadania zaliczeniowe</a>
+                {% endif %}
                 <a href="{{  path('app_logout') }}">logout</a>
             {% else %}
                 <a href="{{  path('app_login') }}">login</a>

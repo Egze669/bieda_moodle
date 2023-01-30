@@ -9,6 +9,13 @@
 </style>
 
 <div class="example-wrapper" >
-        {{ dump(answers) }}
+    {% if answers is not null %}
+        {% for answer in answers %}
+
+            <a href="{{  url('download_answer',{'idAnswer': answer.id}) }}">download id.author</a>
+        {% endfor %}
+    {% else %}
+        <p>nie przesłano jeszcze żadnych odpowiedzi</p>
+    {% endif %}
 </div>
 {% endblock %}

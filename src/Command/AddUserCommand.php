@@ -18,7 +18,7 @@ use Symfony\Component\Stopwatch\Stopwatch;
 use function Symfony\Component\String\u;
 
 // the name of the command is what users type after "php bin/console"
-#[AsCommand(name: 'app:create-user')]
+#[AsCommand(name: 'app:add-user')]
 class AddUserCommand extends Command
 {
     private SymfonyStyle $io;
