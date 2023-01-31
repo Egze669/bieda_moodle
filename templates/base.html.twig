@@ -21,7 +21,7 @@
                 <a href="{{ path('teacher_viewer') }}">lista wykladowcow</a>
                 <a href="{{ path('student_answers') }}">twoje odpowiedzi</a>
                 {% else %}
-                        <a href="{{ path('teacher_viewer') }}">twoje zadania zaliczeniowe</a>
+                        <a href="{{ path('app_teacher') }}">twoje zadania zaliczeniowe</a>
                 {% endif %}
                 <a href="{{  path('app_logout') }}">logout</a>
             {% else %}

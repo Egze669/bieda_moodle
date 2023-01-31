@@ -63,11 +63,19 @@ class TeacherController extends AbstractController
         ]);
     }
 
+    /**
+     * @throws FilesystemException
+     */
     #[Route('/teacher/delete{idTask}', name: 'teacher_task_delete')]
-    public function teacherTaskDelete(Request $request, ManagerRegistry $doctrine, int $idTask): Response
+    public function teacherTaskDelete(Request $request, ManagerRegistry $doctrine, int $idTask,FilesystemOperator $answerStorage): Response
     {
         $em = $doctrine->getManager();
         $task = $doctrine->getRepository(Task::class)->find($idTask);
+        $answers = $task->getAnswers();
+        foreach ($answers as $answer){
+            $answerStorage->delete($answer->getContent());
+            $em->remove($answer);
+        }
         $this->getUser()->removeTask($task);
         $em->remove($task);
         $em->flush();
@@ -77,7 +85,6 @@ class TeacherController extends AbstractController
     #[Route('/teacher/task/{idTask}/answers', name: 'teacher_task_answers')]
     public function teacherTaskAnswers(Request $request, ManagerRegistry $doctrine, int $idTask): Response
     {
-
         $task = $doctrine->getRepository(Task::class)->find($idTask);
         return $this->render('teacher/taskAnswers.html.twig', [
             'answers' => $task->getAnswers()
@@ -101,12 +108,22 @@ class TeacherController extends AbstractController
         $response->headers->set('Content-Type', $pathParts['extension']);
         $disposition = HeaderUtils::makeDisposition(
             HeaderUtils::DISPOSITION_ATTACHMENT,
-            $answer->getTask()->getTitle()."_".$answer->getSubmitDate()->format('Y-m-d')."_".$answer->getAutor()->getEmail()
+            $answer->getTask()->getTitle()."_".$answer->getSubmitDate()->format('Y-m-d')."_".$answer->getAutor()->getName()."_".$answer->getAutor()->getSurname()
         );
         $response->headers->set('Content-Disposition', $disposition);
         return $response;
 
     }
+    #[Route('/grade/{idAnswer}', name: 'grade_answer')]
+    public function gradeAnswer(Request $request, ManagerRegistry $doctrine,string $idAnswer,FilesystemOperator $answerStorage)
+    {
+        $answer = $doctrine->getRepository(Answer::class)->find($idAnswer);
+        $answer->setGrade($request->get('grade'));
+        return $this->render('teacher/taskAnswers.html.twig', [
+            'answers' => $answer->getTask()->getAnswers()
+        ]);
+    }
+
 
     #[Route('/teacher', name: 'app_teacher')]
     public function index(ManagerRegistry $doctrine): Response

@@ -42,4 +42,19 @@ class Validator
 
         return $email;
     }
+
+    public function validateName($name)
+    {
+        if (empty($name)) {
+            throw new InvalidArgumentException('Name can not be empty.');
+        }
+        return $name;
+    }
+    public function validateSurname($surname)
+    {
+        if (empty($surname)) {
+            throw new InvalidArgumentException('Surname can not be empty.');
+        }
+        return $surname;
+    }
 }

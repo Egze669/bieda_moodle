@@ -35,10 +35,11 @@ class AddUserCommand extends Command
 
         $this
             ->setHelp($this->getCommandHelp())
+            ->addArgument('Name', InputArgument::OPTIONAL, 'Name of the user')
+            ->addArgument('Surname', InputArgument::OPTIONAL, 'Surname of the user')
             ->addArgument('email', InputArgument::OPTIONAL, 'The email of the new user')
             ->addArgument('role', InputArgument::OPTIONAL, 'Role of the user(ROLE_STUDENT,ROLE_TEACHER)')
-            ->addArgument('password', InputArgument::OPTIONAL, 'The plain password of the new user')
-            ->addOption('admin', null, InputOption::VALUE_NONE, 'If set, the user is created as an administrator');
+            ->addArgument('password', InputArgument::OPTIONAL, 'The plain password of the new user');
 
     }
     protected function initialize(InputInterface $input, OutputInterface $output): void
@@ -50,7 +51,12 @@ class AddUserCommand extends Command
     }
     protected function interact(InputInterface $input, OutputInterface $output): void
     {
-        if (null !== $input->getArgument('email') && null !== $input->getArgument('password') && null !== $input->getArgument('role')) {
+        if (null !== $input->getArgument('email') &&
+            null !== $input->getArgument('password') &&
+            null !== $input->getArgument('role') &&
+            null !== $input->getArgument('Name') &&
+            null !== $input->getArgument('Surname')
+        ) {
             return;
         }
 
@@ -64,7 +70,22 @@ class AddUserCommand extends Command
             'Now we\'ll ask you for the value of all the missing command arguments.',
         ]);
 
-        // Ask for the password if it's not defined
+        $name = $input->getArgument('Name');
+        if (null !== $name) {
+            $this->io->text(' > <info>name</info>: '.$name);
+        } else {
+            $name = $this->io->ask('Name',null, [$this->validator, 'validateName']);
+            $input->setArgument('Name', $name);
+        }
+
+        $surname = $input->getArgument('Surname');
+        if (null !== $surname) {
+            $this->io->text(' > <info>Surname</info>: '.$surname);
+        } else {
+            $surname = $this->io->ask('Surname',null, [$this->validator, 'validateSurname']);
+            $input->setArgument('Surname', $surname);
+        }
+
         /** @var string|null $password */
         $password = $input->getArgument('password');
         if (null !== $password) {
@@ -97,6 +118,8 @@ class AddUserCommand extends Command
         $stopwatch = new Stopwatch();
         $stopwatch->start('add-user-command');
 
+        $surname = $input->getArgument('Surname');
+        $name = $input->getArgument('Name');
         /** @var string $plainPassword */
         $plainPassword = $input->getArgument('password');
 
@@ -106,10 +129,12 @@ class AddUserCommand extends Command
         $role = strtoupper(trim($input->getArgument('role')));
 
         // make sure to validate the user data is correct
-        $this->validateUserData($plainPassword, $email, $role);
+        $this->validateUserData($name, $surname, $plainPassword, $email, $role);
 
         // create the user and hash its password
         $user = new User();
+        $user->setSurname($surname);
+        $user->setName($name);
         $user->setEmail($email);
         $user->setRoles([$role]);
 
@@ -129,9 +154,11 @@ class AddUserCommand extends Command
         }
         return Command::SUCCESS;
     }
-    private function validateUserData(string $plainPassword, string $email,string $role): void
+    private function validateUserData($name,$surname,string $plainPassword, string $email,string $role): void
     {
         // validate password and email if is not this input means interactive.
+        $this->validator->validateName($name);
+        $this->validator->validateSurname($surname);
         $this->validator->validatePassword($plainPassword);
         $this->validator->validateEmail($email);
         $this->validator->validateRoles($role);
@@ -147,10 +174,9 @@ class AddUserCommand extends Command
     {
         return <<<'HELP'
             The <info>%command.name%</info> command creates new users and saves them in the database:
-              <info>php %command.full_name%</info> <comment>username password email</comment>
-            By default the command creates regular users. To create administrator users,
-            add the <comment>--admin</comment> option:
-              <info>php %command.full_name%</info> username password email <comment>--admin</comment>
+              <info>php %command.full_name%</info> <comment>Name Surname email password role</comment>
+            option:
+              <info>php %command.full_name%</info> Name Surname email password role <comment>--admin</comment>
             If you omit any of the three required arguments, the command will ask you to
             provide the missing values:
               # command will ask you for the email

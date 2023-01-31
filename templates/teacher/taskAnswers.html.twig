@@ -12,7 +12,13 @@
     {% if answers is not null %}
         {% for answer in answers %}
 
-            <a href="{{  url('download_answer',{'idAnswer': answer.id}) }}">download id.author</a>
+            <a href="{{  url('download_answer',{'idAnswer': answer.id}) }}">download {{ answer.autor.name}} | ocena: {{ answer.grade}}</a>
+            <form action="{{ url('grade_answer',{'idAnswer': answer.id}) }}">
+                <label>
+                    <input name="grade" id="grade" type="number">
+                </label>
+                <button type="submit">oceń</button>
+            </form>
         {% endfor %}
     {% else %}
         <p>nie przesłano jeszcze żadnych odpowiedzi</p>
