@@ -79,7 +79,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $conn = $this->getEntityManager()->getConnection();
 
         $sql = "
-        SELECT email FROM user
+        SELECT name,surname,email FROM user
         WHERE roles like '%ROLE_TEACHER%'
         ";
         $stmt = $conn->prepare($sql);

@@ -18,9 +18,11 @@
     </style>
 
     <div class="example-wrapper">
-        <ul>
-        {{ dump(task) }}
-        </ul>
+        <h1>{{ task.title }}</h1>
+        <pre>{{ task.activationDate|date('d-m-Y m:h') }}||{{ task.deactivationDate|date('d-m-Y m:h') }}</pre>
+        <div style="width: 500px; word-wrap: break-word">
+        {{ task.description }}
+        </div>
         <a href="{{  url('teacher_task_update',{'idTask': task.id}) }}">update</a>
         <a href="{{  url('teacher_task_delete',{'idTask': task.id}) }}">delete</a>
         <a href="{{  url('teacher_task_answers',{'idTask': task.id}) }}">see answers</a>

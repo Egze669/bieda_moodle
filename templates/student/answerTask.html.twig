@@ -3,23 +3,34 @@
 {% block title %}Hello StudentController!{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+    <style>
+        .example-wrapper {
+            margin: 1em auto;
+            max-width: 800px;
+            width: 95%;
+            font: 18px/1.5 sans-serif;
+        }
 
-    <div class="example-wrapper" >
+        .example-wrapper code {
+            background: #F5F5F5;
+            padding: 2px 6px;
+        }
+    </style>
+
+    <div class="example-wrapper">
         <h1>{{ task.title }}</h1>
-        <p>{{ task.description }}</p>
+        <div style="width: 500px; word-wrap: break-word">
+            <p>{{ task.description }}</p>
+        </div>
         {% if existing_answer is not null %}
             {% if existing_answer.grade is not null %}
-                <p>Twoja odpowiedź została oceniona!! Otrzymałeś:</p>{{ existing_answer.grade }}
+                <p>Your answer has been evaluated!! Your grade:</p>{{ existing_answer.grade }}
             {% else %}
-        <p>Odpowiedź została już przesłana prosze poczekaj na ocene</p>
+                <p>Answer already submitted and was not evaulated yet</p>
             {% endif %}
 
         {% else %}
-            <h1>prześlij swoją odpowiedź</h1>
+            <h1>Upload your answer</h1>
             {{ form_start(form) }}
             {{ form_row(form.content) }}
             <button type="submit">submit answer</button>

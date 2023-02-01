@@ -19,11 +19,15 @@
 
     <div class="example-wrapper">
         <ul>
-            {{ dump(tasks) }}
-        {% for task in tasks %}
-            {{ dump(task) }}
-            <li><a href="{{  url('student_answer',{'idTask': task.id}) }}"> {{ task.title }}</a></li>
-        {% endfor %}
+            {% if tasks is not empty %}
+                {% for task in tasks %}
+                    {% if date(task.deactivationDate) < date() %}
+                        <li><a href="{{ url('student_answer',{'idTask': task.id}) }}"> {{ task.title }}</a></li>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <p>No tasks yet submited</p>
+            {% endif %}
         </ul>
     </div>
 {% endblock %}

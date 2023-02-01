@@ -9,16 +9,19 @@
 </style>
 
 <div class="example-wrapper" >
-    <h1>add task</h1>
+    <h1>Add task</h1>
     <a href="{{  url('teacher_task_add')}}">add</a>
-    <h1>current tasks</h1>
+    <h1>Current tasks</h1>
     {% for task in tasks %}
-        {{ dump(task)}}
-        <div>
-            <a href="{{  url('teacher_task',{'id': task.id}) }}">{{task.title}}|{{ task.activationDate|date('d-m-Y m:h') }}</a>
-            <a href="{{  url('teacher_task_update',{'idTask': task.id}) }}">update</a>
-            <a href="{{  url('teacher_task_delete',{'idTask': task.id}) }}">delete</a>
-        </div>
+        {% if date(task.deactivationDate) < date()%}
+            <p><a href="{{  url('teacher_task',{'id': task.id}) }}">{{task.title}}|{{ task.deactivationDate|date('d-m-Y m:h') }}</a></p>
+        {% endif %}
+    {% endfor %}
+    <h1>Expired tasks</h1>
+    {% for task in tasks %}
+        {% if date(task.deactivationDate) > date()%}
+            <p><a href="{{  url('teacher_task',{'id': task.id}) }}">{{task.title}}|{{ task.deactivationDate|date('d-m-Y m:h') }}</a></p>
+        {% endif %}
     {% endfor %}
 </div>
 {% endblock %}

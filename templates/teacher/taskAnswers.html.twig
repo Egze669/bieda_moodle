@@ -9,10 +9,15 @@
 </style>
 
 <div class="example-wrapper" >
-    {% if answers is not null %}
+    {% if answers is not empty %}
         {% for answer in answers %}
 
-            <a href="{{  url('download_answer',{'idAnswer': answer.id}) }}">download {{ answer.autor.name}} | ocena: {{ answer.grade}}</a>
+            <p><a href="{{  url('download_answer',{'idAnswer': answer.id}) }}">download {{ answer.autor.name}} </a></p>
+                {% if answer.grade is not null %}
+                    <p>grade: {{ answer.grade}}</p>
+                {% else %}
+                    <p>not evaluated yet</p>
+                {% endif %}
             <form action="{{ url('grade_answer',{'idAnswer': answer.id}) }}">
                 <label>
                     <input name="grade" id="grade" type="number">
@@ -21,7 +26,7 @@
             </form>
         {% endfor %}
     {% else %}
-        <p>nie przesłano jeszcze żadnych odpowiedzi</p>
+        <p>No answers yet</p>
     {% endif %}
 </div>
 {% endblock %}

@@ -9,7 +9,16 @@
 </style>
 
 <div class="example-wrapper" >
+        <h1>Update your task.</h1>
         {{ form_start(form) }}
+        {{ form_row(form.title) }}
+
+        {{ form_row(form.description) }}
+
+        {{ form_row(form.activationDate) }}
+
+        {{ form_row(form.deactivationDate) }}
+        <br>
         <button type="submit">update</button>
         {{ form_end(form) }}
 </div>

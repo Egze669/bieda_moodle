@@ -21,11 +21,18 @@
         <ul>
             {% if answers is not null %}
         {% for answer in answers %}
-            {{ dump(answer) }}
-            {{ dump(answer.task.title) }}
+            <p>task: {{ answer.task.title }}
+                <br>submit date{{ answer.submitDate|date('d-m-Y m:h') }}
+            {% if(answer.grade is not null) %}
+            <br>grade: {{ answer.grade }}
+                {% else %}
+                <br>not yet evaluated
+                    {% endif %}
+            </p>
+            <hr>
         {% endfor %}
             {% else %}
-                <p> nie wysłałeś jeszcze żadnych odpowiedzi</p>
+                <p>No answer submitted</p>
             {% endif %}
         </ul>
     </div>

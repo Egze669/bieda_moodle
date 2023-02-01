@@ -20,7 +20,7 @@
     <div class="example-wrapper">
         <ul>
         {% for teachers in teachersArray %}
-            <li><a href="{{  url('teacher_tasks',{'email': teachers['email']}) }}"> {{ teachers.email }} </a></li>
+            <li><a href="{{  url('teacher_tasks',{'email': teachers['email']}) }}"> {{ teachers.name }} {{ teachers.surname }} </a></li>
         {% endfor %}
         </ul>
     </div>

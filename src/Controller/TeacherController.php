@@ -119,6 +119,10 @@ class TeacherController extends AbstractController
     {
         $answer = $doctrine->getRepository(Answer::class)->find($idAnswer);
         $answer->setGrade($request->get('grade'));
+
+        $em = $doctrine->getManager();
+        $em->persist($answer);
+        $em->flush();
         return $this->render('teacher/taskAnswers.html.twig', [
             'answers' => $answer->getTask()->getAnswers()
         ]);
