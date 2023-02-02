@@ -29,14 +29,26 @@ class Task
     #[ORM\OneToMany(mappedBy: 'task', targetEntity: Answer::class)]
     private Collection $answers;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: "datetime")]
     private ?\DateTimeInterface $activationDate = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: "datetime")]
     private ?\DateTimeInterface $deactivationDate = null;
 
-    public function __construct()
+    /**
+     * @param $title
+     * @param $description
+     * @param $autor
+     * @param $activationDate
+     * @param $deactivationDate
+     */
+    public function __construct($title, $description , $autor, $activationDate, $deactivationDate)
     {
+        $this->title = $title;
+        $this->description = $description;
+        $this->autor = $autor;
+        $this->activationDate = $activationDate;
+        $this->deactivationDate = $deactivationDate;
         $this->answers = new ArrayCollection();
     }
 

@@ -21,7 +21,7 @@
         <ul>
             {% if tasks is not empty %}
                 {% for task in tasks %}
-                    {% if date(task.deactivationDate) < date() %}
+                    {% if date(task.deactivationDate) > date() %}
                         <li><a href="{{ url('student_answer',{'idTask': task.id}) }}"> {{ task.title }}</a></li>
                     {% endif %}
                 {% endfor %}

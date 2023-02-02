@@ -19,7 +19,7 @@
 
     <div class="example-wrapper">
         <h1>{{ task.title }}</h1>
-        <pre>{{ task.activationDate|date('d-m-Y m:h') }}||{{ task.deactivationDate|date('d-m-Y m:h') }}</pre>
+        <pre>{{ task.activationDate|date('Y-m-d H:i') }}||{{ task.deactivationDate|date('Y-m-d H:i') }}</pre>
         <div style="width: 500px; word-wrap: break-word">
         {{ task.description }}
         </div>

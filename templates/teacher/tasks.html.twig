@@ -13,14 +13,14 @@
     <a href="{{  url('teacher_task_add')}}">add</a>
     <h1>Current tasks</h1>
     {% for task in tasks %}
-        {% if date(task.deactivationDate) < date()%}
-            <p><a href="{{  url('teacher_task',{'id': task.id}) }}">{{task.title}}|{{ task.deactivationDate|date('d-m-Y m:h') }}</a></p>
+        {% if date(task.deactivationDate) > date()%}
+            <p><a href="{{  url('teacher_task',{'id': task.id}) }}">{{task.title}}|{{ task.deactivationDate|date('Y-m-d H:i') }}</a></p>
         {% endif %}
     {% endfor %}
     <h1>Expired tasks</h1>
     {% for task in tasks %}
-        {% if date(task.deactivationDate) > date()%}
-            <p><a href="{{  url('teacher_task',{'id': task.id}) }}">{{task.title}}|{{ task.deactivationDate|date('d-m-Y m:h') }}</a></p>
+        {% if date(task.deactivationDate) < date()%}
+            <p><a href="{{  url('teacher_task',{'id': task.id}) }}">{{task.title}}|{{ task.deactivationDate|date('Y-m-d H:i') }}</a></p>
         {% endif %}
     {% endfor %}
 </div>

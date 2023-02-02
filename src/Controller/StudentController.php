@@ -87,6 +87,7 @@ class StudentController extends AbstractController
                 $em->persist($answer);
                 $em->flush();
 
+                return $this->redirect($request->getUri());
             }
 
         }

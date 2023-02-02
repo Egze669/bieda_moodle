@@ -8,6 +8,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File;
 
 class AnswerType extends AbstractType
 {
@@ -15,7 +16,14 @@ class AnswerType extends AbstractType
     {
         $builder
             ->add('content',FileType::class,[
-                'data_class' => FilesystemOperator::class
+                'data_class' => FilesystemOperator::class,
+                'constraints' => [
+                    new File([
+                        'maxSize' => '5M',
+                        'extensions' => ['pdf','txt'],
+                        'extensionsMessage' => 'Please upload .pdf or .txt extension file'
+                    ])
+    ]
             ])
         ;
     }

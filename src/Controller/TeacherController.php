@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Dto\TaskDTO;
 use App\Entity\Answer;
 use App\Entity\Task;
 use App\Entity\User;
@@ -24,12 +25,12 @@ class TeacherController extends AbstractController
     #[Route('/teacher/add', name: 'teacher_task_add')]
     public function teacherTaskAdd(Request $request, ManagerRegistry $doctrine): Response
     {
-        $task = new Task();
-        $form = $this->createForm(TaskType::class, $task);
+        $taskDTO = new TaskDTO();
+        $form = $this->createForm(TaskType::class, $taskDTO);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $task->setAutor($this->getUser());
+            $task = new Task($taskDTO->title,$taskDTO->description,$this->getUser(),$taskDTO->activationDate,$taskDTO->deactivationDate);
             $this->getUser()->addTask($task);
             $em = $doctrine->getManager();
             $em->persist($task);
@@ -47,12 +48,17 @@ class TeacherController extends AbstractController
     public function teacherTaskUpdate(Request $request, ManagerRegistry $doctrine, int $idTask): Response
     {
         $task = $doctrine->getRepository(Task::class)->find($idTask);
-
-        $form = $this->createForm(TaskType::class, $task);
+        $taskDTO = new TaskDTO();
+        $taskDTO->updateTask($task);
+        $form = $this->createForm(TaskType::class, $taskDTO);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $doctrine->getManager();
+            $task->setTitle($taskDTO->title);
+            $task->setDescription($taskDTO->description);
+            $task->setActivationdate($taskDTO->activationDate);
+            $task->setDeactivationdate($taskDTO->deactivationDate);
             $em->persist($task);
             $em->flush();
 

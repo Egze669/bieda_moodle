@@ -22,7 +22,7 @@
             {% if answers is not null %}
         {% for answer in answers %}
             <p>task: {{ answer.task.title }}
-                <br>submit date{{ answer.submitDate|date('d-m-Y m:h') }}
+                <br>submit date{{ answer.submitDate|date('Y-m-d H:i') }}
             {% if(answer.grade is not null) %}
             <br>grade: {{ answer.grade }}
                 {% else %}
