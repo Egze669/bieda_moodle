@@ -9,7 +9,9 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\File;
-
+/**
+ * @template-extends  AbstractType<int>
+ */
 class AnswerType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -27,7 +29,11 @@ class AnswerType extends AbstractType
             ])
         ;
     }
-
+    public function __toString(): string {
+        /** @var string $parent */
+        $parent = $this->getParent();
+        return $parent;
+    }
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([

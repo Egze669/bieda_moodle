@@ -21,6 +21,10 @@ use function Symfony\Component\String\u;
 #[AsCommand(name: 'app:add-user')]
 class AddUserCommand extends Command
 {
+    /**
+     * @var SymfonyStyle
+     * @psalm-suppress PropertyNotSetInConstructor
+     */
     private SymfonyStyle $io;
     public function __construct(
         private EntityManagerInterface $entityManager,
@@ -30,6 +34,9 @@ class AddUserCommand extends Command
     ) {
         parent::__construct();
     }
+    /**
+     * @return void
+     */
     protected function configure()
     {
 
@@ -70,18 +77,22 @@ class AddUserCommand extends Command
             'Now we\'ll ask you for the value of all the missing command arguments.',
         ]);
 
+        /** @var null|string $name */
         $name = $input->getArgument('Name');
         if (null !== $name) {
             $this->io->text(' > <info>name</info>: '.$name);
         } else {
+            /** @var string $name */
             $name = $this->io->ask('Name',null, [$this->validator, 'validateName']);
             $input->setArgument('Name', $name);
         }
 
+        /** @var string|null $surname */
         $surname = $input->getArgument('Surname');
         if (null !== $surname) {
             $this->io->text(' > <info>Surname</info>: '.$surname);
         } else {
+            /** @var string $surname */
             $surname = $this->io->ask('Surname',null, [$this->validator, 'validateSurname']);
             $input->setArgument('Surname', $surname);
         }
@@ -91,22 +102,28 @@ class AddUserCommand extends Command
         if (null !== $password) {
             $this->io->text(' > <info>Password</info>: '.u('*')->repeat(u($password)->length()));
         } else {
+            /** @var string $password */
             $password = $this->io->askHidden('Password (your type will be hidden)', [$this->validator, 'validatePassword']);
             $input->setArgument('password', $password);
         }
 
         // Ask for the email if it's not defined
+        /** @var null|string $email */
         $email = $input->getArgument('email');
         if (null !== $email) {
             $this->io->text(' > <info>Email</info>: '.$email);
         } else {
+            /** @var null|string $email */
             $email = $this->io->ask('Email', null, [$this->validator, 'validateEmail']);
+
             $input->setArgument('email', $email);
         }
+        /** @var null|string $role */
         $role = $input->getArgument('role');
         if (null !== $role) {
             $this->io->text(' > <info>Role</info>: '.u($role)->trim()->upper());
         } else {
+            /** @var null|string $role */
             $role = $this->io->ask('Role (ROLE_STUDENT or ROLE_TEACHER)', null, [$this->validator, 'validateRoles']);
             $input->setArgument('role', u($role)->trim()->upper());
         }
@@ -118,7 +135,9 @@ class AddUserCommand extends Command
         $stopwatch = new Stopwatch();
         $stopwatch->start('add-user-command');
 
+        /** @var string $surname */
         $surname = $input->getArgument('Surname');
+        /** @var string $name */
         $name = $input->getArgument('Name');
         /** @var string $plainPassword */
         $plainPassword = $input->getArgument('password');
@@ -126,7 +145,9 @@ class AddUserCommand extends Command
         /** @var string $email */
         $email = $input->getArgument('email');
 
-        $role = strtoupper(trim($input->getArgument('role')));
+        /** @var string $role */
+        $role = $input->getArgument('role');
+        $role = strtoupper(trim($role));
 
         // make sure to validate the user data is correct
         $this->validateUserData($name, $surname, $plainPassword, $email, $role);
@@ -137,7 +158,10 @@ class AddUserCommand extends Command
         $user->setName($name);
         $user->setEmail($email);
         $user->setRoles([$role]);
-
+        /** @var string $id */
+        $id = $user->getId();
+        /** @var string $email */
+        $email = $user->getEmail();
         // See https://symfony.com/doc/5.4/security.html#registering-the-user-hashing-passwords
         $hashedPassword = $this->passwordHasher->hashPassword($user, $plainPassword);
         $user->setPassword($hashedPassword);
@@ -145,16 +169,25 @@ class AddUserCommand extends Command
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
-        $this->io->success(sprintf('%s was successfully created: %s', 'User',$user->getEmail()));
+        $this->io->success(sprintf('%s was successfully created: %s', 'User', $email));
 
         $event = $stopwatch->stop('add-user-command');
+
+
         if ($output->isVerbose()) {
-            $this->io->comment(sprintf('New user database id: %d / Elapsed time: %.2f ms / Consumed memory: %.2f MB', $user->getId(), $event->getDuration(), $event->getMemory() / (1024 ** 2)));
+            $this->io->comment(sprintf('New user database id: %d / Elapsed time: %.2f ms / Consumed memory: %.2f MB',
+                $id,
+                $event->getDuration(),
+                $event->getMemory() / (1024 ** 2)));
 
         }
         return Command::SUCCESS;
     }
-    private function validateUserData($name,$surname,string $plainPassword, string $email,string $role): void
+    /**
+     * @param null|string $name
+     * @param null|string $surname
+     */
+    private function validateUserData(string|null $name,string|null $surname,string $plainPassword, string $email,string $role): void
     {
         // validate password and email if is not this input means interactive.
         $this->validator->validateName($name);

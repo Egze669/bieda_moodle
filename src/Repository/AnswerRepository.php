@@ -11,7 +11,10 @@ use Doctrine\Persistence\ManagerRegistry;
  *
  * @method Answer|null find($id, $lockMode = null, $lockVersion = null)
  * @method Answer|null findOneBy(array $criteria, array $orderBy = null)
+ * @psalm-method list<Answer> findAll()
  * @method Answer[]    findAll()
+ *
+ * @psalm-method list<Answer> findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  * @method Answer[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class AnswerRepository extends ServiceEntityRepository

@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints\Date;
 
 #[ORM\Entity(repositoryClass: TaskRepository::class)]
 class Task
@@ -36,13 +37,19 @@ class Task
     private ?\DateTimeInterface $deactivationDate = null;
 
     /**
-     * @param $title
-     * @param $description
-     * @param $autor
-     * @param $activationDate
-     * @param $deactivationDate
+     * @param string $title
+     * @param string $description
+     * @param User $autor
+     * @param \DateTimeInterface $activationDate
+     * @param \DateTimeInterface $deactivationDate
      */
-    public function __construct($title, $description , $autor, $activationDate, $deactivationDate)
+    public function __construct(
+        ?string             $title,
+        ?string             $description,
+        ?User               $autor,
+        ?\DateTimeInterface $activationDate,
+        ?\DateTimeInterface $deactivationDate
+    )
     {
         $this->title = $title;
         $this->description = $description;
@@ -94,7 +101,7 @@ class Task
     }
 
     /**
-     * @return Collection<int, Answer>
+     * @return Collection
      */
     public function getAnswers(): Collection
     {
@@ -103,10 +110,8 @@ class Task
 
     public function addAnswer(Answer $answer): self
     {
-        if (!$this->answers->contains($answer)) {
-            $this->answers->add($answer);
-            $answer->setTask($this);
-        }
+        $this->answers->add($answer);
+        $answer->setTask($this);
 
         return $this;
     }
@@ -146,4 +151,5 @@ class Task
 
         return $this;
     }
+
 }

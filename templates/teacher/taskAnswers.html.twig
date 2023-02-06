@@ -20,7 +20,7 @@
                 {% endif %}
             <form action="{{ url('grade_answer',{'idAnswer': answer.id}) }}">
                 <label>
-                    <input name="grade" id="grade" type="number">
+                    <input name="grade" id="grade" type="number" required min="1" max="5">
                 </label>
                 <button type="submit">Evaluate</button>
             </form>

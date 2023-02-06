@@ -17,9 +17,13 @@ class RedirectionController extends AbstractController
     #[Route('/redirect', name: 'app_redirect')]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
-        if(in_array('ROLE_TEACHER',$this->getUser()->getRoles()))
+        /** @var User $user */
+        $user = $this->getUser();
+        /** @var array $userRoles */
+        $userRoles = $user->getRoles();
+        if(in_array('ROLE_TEACHER',$userRoles))
             return $this->redirect($this->generateUrl('app_teacher'));
-        elseif (in_array('ROLE_STUDENT',$this->getUser()->getRoles()))
+        elseif (in_array('ROLE_STUDENT',$userRoles))
             return $this->redirect($this->generateUrl('teacher_viewer'));
         else
         return $this->render('login/addTask.html.twig', [

@@ -22,6 +22,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
 
+    /**
+     * @var array<array-key,string>
+     */
     #[ORM\Column]
     private array $roles = [];
 
@@ -73,10 +76,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->email;
+        return (string)$this->email;
     }
 
     /**
+     * @return array<array-key,string>
      * @see UserInterface
      */
     public function getRoles(): array
@@ -88,6 +92,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return array_unique($roles);
     }
 
+    /**
+     * @param array<array-key,string> $roles
+     * @return $this
+     */
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
@@ -98,7 +106,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @see PasswordAuthenticatedUserInterface
      */
-    public function getPassword(): string
+    public function getPassword(): string|null
     {
         return $this->password;
     }
@@ -113,14 +121,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @see UserInterface
      */
-    public function eraseCredentials()
+    public function eraseCredentials():void
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
     }
 
     /**
-     * @return Collection<int, Task>
+     * @return Collection
      */
     public function getTasks(): Collection
     {
@@ -129,10 +137,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function addTask(Task $task): self
     {
-        if (!$this->tasks->contains($task)) {
-            $this->tasks->add($task);
-            $task->setAutor($this);
-        }
+        $this->tasks->add($task);
+        $task->setAutor($this);
 
         return $this;
     }
@@ -149,8 +155,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+
     /**
-     * @return Collection<int, Answer>
+     * @return Collection
      */
     public function getAnswers(): Collection
     {
@@ -159,10 +166,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function addAnswer(Answer $answer): self
     {
-        if (!$this->answers->contains($answer)) {
-            $this->answers->add($answer);
-            $answer->setAutor($this);
-        }
+        $this->answers->add($answer);
+        $answer->setAutor($this);
 
         return $this;
     }

@@ -12,7 +12,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
-
+/**
+ * @template-extends  AbstractType<int>
+ */
 class RegistrationFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -51,7 +53,11 @@ class RegistrationFormType extends AbstractType
                 ],
             ]);
     }
-
+    public function __toString(): string {
+        /** @var string $parent */
+        $parent = $this->getParent();
+        return $parent;
+    }
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([

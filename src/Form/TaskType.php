@@ -12,6 +12,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 
+/**
+ * @template-extends  AbstractType<int>
+ */
 class TaskType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -22,6 +25,11 @@ class TaskType extends AbstractType
             ->add('activationDate',DateTimeType::class)
             ->add('deactivationDate',DateTimeType::class)
         ;
+    }
+    public function __toString(): string {
+        /** @var string $parent */
+        $parent = $this->getParent();
+        return $parent;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

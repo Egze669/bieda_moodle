@@ -21,6 +21,9 @@ class TaskDTO
     )]
     public ?string $description = '';
 
+    /**
+     * @var \DateTimeInterface|null
+     */
     #[Assert\NotNull]
     #[Assert\GreaterThanOrEqual(
         new \DateTime(),
@@ -30,7 +33,10 @@ class TaskDTO
        "(this.activationDate < this.deactivationDate)",
         message: 'Activation date should not be the same as deactivation or past it',
    )]
-    public ?\DateTime $activationDate;
+    public ?\DateTimeInterface $activationDate = null;
+    /**
+     * @var \DateTimeInterface|null
+     */
     #[Assert\NotNull]
     #[Assert\GreaterThanOrEqual(
         new \DateTime(),
@@ -40,14 +46,8 @@ class TaskDTO
         "(this.deactivationDate > this.activationDate)",
         message: 'Deactivation date should not be the same as activation or earlier',
     )]
-    public ?\DateTime $deactivationDate;
-//    #[Assert\Regex(pattern: "/^(\+( *\d *){1,3})?( *\d *){9}$/", message: "application.phoneNumber.regex")]
-//    public ?string $telephone = '';
-//    #[Assert\Expression(
-//        "(this.agreeTerms == true and (this.email != '' or this.telephone != '')) or (this.email == '' and this.telephone == '')",
-//        message: 'application.agreeTerms.expression',
-//    )]
-    public function updateTask(Task $task)
+    public ?\DateTimeInterface $deactivationDate = null;
+    public function updateTask(Task $task):void
     {
         $this->title = $task->getTitle();
         $this->description = $task->getDescription();
