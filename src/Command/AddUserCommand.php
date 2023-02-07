@@ -72,7 +72,7 @@ class AddUserCommand extends Command
             'If you prefer to not use this interactive wizard, provide the',
             'arguments required by this command as follows:',
             '',
-            ' $ php bin/console app:add-user username password email@example.com',
+            ' $ php bin/console app:add-user name surname username email role(ROLE_TEACHER or ROLE_STUDENT) password ',
             '',
             'Now we\'ll ask you for the value of all the missing command arguments.',
         ]);

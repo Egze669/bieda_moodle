@@ -9,17 +9,24 @@
 </style>
 
 <div class="example-wrapper" >
+    <div>
     <h1>Add your new task!</h1>
     {{ form_start(form) }}
-    {{ form_row(form.title) }}
-
-    {{ form_row(form.description) }}
+    <div>
+    {{ form_label(form.title) }}
+    </div>
+    {{ form_widget(form.title) }}
+    <div>
+        {{ form_label(form.description) }}
+    </div>
+    {{ form_widget(form.description) }}
 
     {{ form_row(form.activationDate) }}
 
     {{ form_row(form.deactivationDate) }}
 
-    <br><button type="submit">wyslij zadanie</button>
+    <br><button type="submit" class="btn btn-success">wyslij zadanie</button>
     {{ form_end(form) }}
+    </div>
 </div>
 {% endblock %}

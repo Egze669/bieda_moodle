@@ -67,3 +67,10 @@
 # Embedded web-server pid file
 /.web-server-pid
 ff2ca2b6a11dc2703523fe890ee1007590bd67fc
+
+###> symfony/webpack-encore-bundle ###
+/node_modules/
+/public/build/
+npm-debug.log
+yarn-error.log
+###< symfony/webpack-encore-bundle ###
