@@ -11,10 +11,14 @@
 <div class="example-wrapper" >
         <h1>Update your task.</h1>
         {{ form_start(form) }}
-        {{ form_row(form.title) }}
-
-        {{ form_row(form.description) }}
-
+        <div>
+                {{ form_label(form.title) }}
+        </div>
+        {{ form_widget(form.title) }}
+        <div>
+                {{ form_label(form.description) }}
+        </div>
+        {{ form_widget(form.description) }}
         {{ form_row(form.activationDate) }}
 
         {{ form_row(form.deactivationDate) }}
